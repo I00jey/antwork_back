@@ -94,4 +94,4 @@ npm install
 # 6. info
 <br>
 
-만약 사용 중 문제발생 시, dydgjs2016@naver.com 으로 문의 바랍니다.
+만약 사용 중 문제발생 시, cyj3038@naver.com 으로 문의 바랍니다.
