@@ -75,7 +75,7 @@
 
 1. 클론 받아오기
 ```
-git clone https://github.com/nwejin/teamprojectBteam-Back.git
+git clone https://github.com/I00jey/antwork_back.git
 ```
 <br>
 
