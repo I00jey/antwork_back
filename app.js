@@ -10,8 +10,7 @@ mongoConnect();
 const PORT = process.env.PORT || 8000;
 app.use(
     cors({
-        // origin: 'http://13.125.130.121', // 클라이언트의 도메인
-        origin: 'http://localhost:3000',
+        origin: process.env.REDIRECT_URI,
         credentials: true,
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     })
