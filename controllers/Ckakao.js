@@ -1,6 +1,5 @@
 require('dotenv').config();
 const axios = require('axios');
-const qs = require('querystring');
 const UserSchema = require('../models/UserSchema');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -11,108 +10,109 @@ const cookieConfig = {
 
 async function call(method, uri, param, header) {
     try {
-        rtn = await axios({
-            method: method,
+        const response = await axios({
+            method,
             url: uri,
             headers: header,
             data: param,
         });
+        return response.data;
     } catch (err) {
-        rtn = err.response;
+        return err.response?.data || { error: 'Axios call failed' };
     }
-    return rtn.data;
 }
 
 let kakaoToken = '';
+
 exports.login = async (req, res) => {
     console.log('로그인 요청');
-    let userid;
-    let useremail;
-    let userprofile;
-    let usernickname;
-    let userpassword;
 
     try {
-        const param = qs.stringify({
+        // 🔁 URLSearchParams로 대체 (querystring 제거)
+        const params = new URLSearchParams({
             grant_type: 'authorization_code',
             client_id: process.env.CLIENT_ID,
             redirect_uri: process.env.REDIRECT_URI,
             client_secret: process.env.CLIENT_SECRET,
             code: req.query.code,
         });
-        const header = { 'content-type': 'application/x-www-form-urlencoded' };
-        const rtn = await call('POST', process.env.TOKEN_URI, param, header);
-        kakaoToken = rtn.access_token;
 
-        try {
-            const uri = process.env.API_HOST + '/v2/user/me';
-            const param = {};
-            const header = {
-                'content-type':
+        const tokenRes = await call(
+            'POST',
+            process.env.TOKEN_URI,
+            params.toString(),
+            { 'Content-Type': 'application/x-www-form-urlencoded' }
+        );
+
+        kakaoToken = tokenRes.access_token;
+        if (!kakaoToken) throw new Error('카카오 토큰 획득 실패');
+
+        // 🔍 사용자 정보 요청
+        const userInfo = await call(
+            'POST',
+            `${process.env.API_HOST}/v2/user/me`,
+            {},
+            {
+                'Content-Type':
                     'application/x-www-form-urlencoded;charset=utf-8',
                 Authorization: `Bearer ${kakaoToken}`,
-            };
-            const rtn = await call('POST', uri, param, header);
-
-            try {
-                userid = rtn.id.toString();
-                usernickname = rtn.properties.nickname;
-                userprofile = rtn.properties.profile_image;
-                useremail = rtn.kakao_account.email;
-                userpassword = bcrypt.hashSync(userid, 10);
-
-                const checkUser = await UserSchema.findOne({
-                    user_id: userid,
-                });
-
-                // 해당 유저가 DB에 없으면 DOCUMENT 생성
-                if (!checkUser) {
-                    const newUser = await UserSchema.create({
-                        user_id: userid,
-                        user_password: userpassword,
-                        user_email: useremail,
-                        user_nickname: usernickname,
-                        user_profile: userprofile,
-                        isKakao: 1,
-                    });
-                }
-
-                // 카카오 로그인 여부 확인
-                res.cookie('isKakao', true, cookieConfig);
-                // 현재 사용자 로그인 여부 확인 (카카오 아이디 jwt)
-                const token = jwt.sign({ id: userid }, process.env.JWTSECRET);
-                res.cookie('jwtCookie', token, cookieConfig);
-                // 카카오 로그인 토큰 저장
-                res.cookie('kakaoToken', kakaoToken, cookieConfig);
-                res.json({ success: true, cookieId: req.cookies.saveId });
-            } catch (error) {
-                res.send('user db 저장 오류');
-                console.log(error);
             }
-        } catch (error) {
-            // Handle error
-            console.error(error);
-            res.send('profile 가져오기 오류');
+        );
+
+        const userid = userInfo.id.toString();
+        const usernickname = userInfo.properties.nickname;
+        const userprofile = userInfo.properties.profile_image;
+        const useremail = userInfo.kakao_account.email;
+
+        // 🔐 사용자 ID를 해싱해서 비밀번호 대체용으로 사용
+        const userpassword = bcrypt.hashSync(userid, 10);
+
+        // ⚙️ 유저 없으면 새로 생성
+        let user = await UserSchema.findOne({ user_id: userid });
+        if (!user) {
+            user = await UserSchema.create({
+                user_id: userid,
+                user_password: userpassword,
+                user_email: useremail,
+                user_nickname: usernickname,
+                user_profile: userprofile,
+                isKakao: 1,
+            });
         }
+
+        // 🍪 쿠키 설정
+        res.cookie('isKakao', true, cookieConfig);
+
+        const token = jwt.sign({ id: userid }, process.env.JWTSECRET);
+        res.cookie('jwtCookie', token, cookieConfig);
+        res.cookie('kakaoToken', kakaoToken, cookieConfig);
+
+        res.json({ success: true, cookieId: req.cookies.saveId });
     } catch (error) {
-        console.log(error);
-        res.send('login 오류');
+        console.error('[로그인 실패]', error);
+        res.status(500).json({
+            success: false,
+            message: '로그인 중 오류 발생',
+        });
     }
 };
 
 // 회원탈퇴
 exports.exit = async (req, res) => {
-    const uri = process.env.API_HOST + '/v1/user/unlink';
-    const param = null;
-    const header = {
-        Authorization: 'Bearer ' + req.body.kakaoToken,
-    };
     try {
-        const rtn = await call('POST', uri, param, header);
+        const rtn = await call(
+            'POST',
+            `${process.env.API_HOST}/v1/user/unlink`,
+            null,
+            {
+                Authorization: 'Bearer ' + req.body.kakaoToken,
+            }
+        );
+
         kakaoToken = '';
         res.send({ success: true, message: '카카오 회원 탈퇴 성공' });
     } catch (error) {
-        console.log(error);
+        console.error('[회원탈퇴 실패]', error);
         res.send({ success: false, message: '카카오 회원 탈퇴 취소' });
     }
 };

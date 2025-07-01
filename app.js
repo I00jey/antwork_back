@@ -1,10 +1,8 @@
-const mongoose = require('mongoose');
 const cors = require('cors');
 const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser');
 const mongoConnect = require('./models/Mindex');
-const qs = require('querystring');
 
 mongoConnect();
 const PORT = process.env.PORT || 8000;
