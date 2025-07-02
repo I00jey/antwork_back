@@ -16,9 +16,14 @@ exports.sendEconomyNews = async (req, res) => {
             res.send(existingNews);
         } else {
             console.log('News DB is empty');
+            res.send([]);
         }
     } catch (error) {
         console.error('Error in database operation:', error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -31,9 +36,14 @@ exports.sendStockNews = async (req, res) => {
             res.send(existingNews);
         } else {
             console.log('News DB is empty');
+            res.send([]);
         }
     } catch (error) {
         console.error('Error in database operation:', error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -46,9 +56,14 @@ exports.sendCoinNews = async (req, res) => {
             res.send(existingNews);
         } else {
             console.log('News DB is empty');
+            res.send([]);
         }
     } catch (error) {
         console.error('Error in database operation:', error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -204,6 +219,10 @@ exports.getMainNews = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -225,6 +244,10 @@ exports.getMyWords = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -254,6 +277,10 @@ exports.deleteMyWords = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -274,6 +301,10 @@ exports.getMyNews = async (req, res) => {
         }
     } catch (error) {
         console.error(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -295,6 +326,10 @@ exports.getDetail = async (req, res) => {
         // res.send(data);
     } catch (error) {
         console.error(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -305,6 +340,10 @@ exports.getWordsDb = async (req, res) => {
         res.json(words);
     } catch (error) {
         console.error(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -327,6 +366,10 @@ exports.checkMyWord = async (req, res) => {
         }
     } catch (error) {
         console.error(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -356,6 +399,10 @@ exports.saveMyWord = async (req, res) => {
         }
     } catch (error) {
         console.error(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -378,6 +425,10 @@ exports.checkMyNews = async (req, res) => {
         }
     } catch (error) {
         console.error(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -408,6 +459,10 @@ exports.saveMyNews = async (req, res) => {
         }
     } catch (error) {
         console.error(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -448,8 +503,16 @@ exports.myHighlight = async (req, res) => {
             }
             await saveUserCheck.save();
         }
+        res.status(200).json({
+            success: true,
+            message: '하이라이트 저장 성공!',
+        });
     } catch (error) {
         console.error(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -475,6 +538,10 @@ exports.getHighlight = async (req, res) => {
         }
     } catch (error) {
         console.error(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -523,5 +590,9 @@ exports.deleteHighlight = async (req, res) => {
         }
     } catch (error) {
         console.error(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };

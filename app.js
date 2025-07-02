@@ -8,7 +8,7 @@ mongoConnect();
 const PORT = process.env.PORT || 8000;
 app.use(
     cors({
-        origin: process.env.REDIRECT_URI,
+        origin: process.env.FRONT_URI,
         credentials: true,
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     })

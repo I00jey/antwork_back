@@ -241,6 +241,10 @@ exports.getMainBoards = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -256,7 +260,10 @@ exports.modifyCommunity = async (req, res) => {
         );
         res.send('데이터 수정 성공');
     } catch (error) {
-        res.send('데이터 수정 실패');
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -266,7 +273,10 @@ exports.updateCommunity = async (req, res) => {
         res.send(result);
     } catch (error) {
         console.log(error);
-        res.send('수정 데이터 불러오기 실패');
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -295,7 +305,10 @@ exports.deleteCommunity = async (req, res) => {
         res.send(result);
     } catch (error) {
         console.log('del err', error);
-        res.send('게시물 삭제 실패');
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -311,7 +324,10 @@ exports.deleteComment = async (req, res) => {
         });
         res.send(result);
     } catch (error) {
-        res.send('댓글 삭제 실패');
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -322,7 +338,10 @@ exports.deleteReComment = async (req, res) => {
         );
         res.send(result);
     } catch (err) {
-        res.send('대댓글 삭제 실패');
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -340,7 +359,10 @@ exports.searchCommunity = async (req, res) => {
         res.send(searchResult);
     } catch (error) {
         //console.log('게시물 DB 검색 실패', error);
-        res.send('게시물 DB 검색 실패');
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -382,6 +404,10 @@ exports.reportCommunity = async (req, res) => {
         res.send({ result, active });
     } catch (error) {
         console.log('신고 에러', error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -397,6 +423,10 @@ exports.getReportCommunity = async (req, res) => {
         res.json({ isUserReported });
     } catch (error) {
         console.log(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
 
@@ -415,5 +445,9 @@ exports.communityGetLike = async (req, res) => {
         res.json({ isUserliked, like });
     } catch (error) {
         console.log(error);
+        res.status(500).send({
+            success: false,
+            msg: '예상치 못한 오류가 발생했습니다!',
+        });
     }
 };
