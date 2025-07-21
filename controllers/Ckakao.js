@@ -28,7 +28,6 @@ exports.login = async (req, res) => {
     console.log('로그인 요청');
 
     try {
-        // 🔁 URLSearchParams로 대체 (querystring 제거)
         const params = new URLSearchParams({
             grant_type: 'authorization_code',
             client_id: process.env.CLIENT_ID,
