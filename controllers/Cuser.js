@@ -26,7 +26,7 @@ exports.userLogin = async (req, res) => {
             res.cookie('saveId', user_id, cookieConfig2);
         }
 
-        console.log(req.cookies.saveId);
+        // console.log(req.cookies.saveId);
 
         const user = await UserSchema.findOne({
             user_id: user_id,

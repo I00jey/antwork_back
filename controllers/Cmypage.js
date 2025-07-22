@@ -84,10 +84,10 @@ exports.modifyUserInfo = async (req, res) => {
     console.log(req.file);
     const user_profile = req.file ? req.file.location : null;
 
-    console.log('user_profile', user_profile);
+    console.log('user_profile ->', user_profile);
     const currentUserId = req.body.user_id;
     try {
-        console.log('현재 사용자 아이디', currentUserId);
+        console.log('현재 사용자 아이디 ->', currentUserId);
         if (user_changepw == '' && user_profile == null) {
             const modifyUser = await UserSchema.updateOne(
                 {

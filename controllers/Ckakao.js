@@ -35,15 +35,15 @@ exports.login = async (req, res) => {
             client_secret: process.env.CLIENT_SECRET,
             code: req.query.code,
         });
-
+        console.log('로그인 토큰 요청 params -> ', params);
         const tokenRes = await call(
             'POST',
             process.env.TOKEN_URI,
             params.toString(),
             { 'Content-Type': 'application/x-www-form-urlencoded' }
         );
-
         kakaoToken = tokenRes.access_token;
+        console.log('카카오 토큰 -> ', kakaoToken)
         if (!kakaoToken) throw new Error('카카오 토큰 획득 실패');
 
         // 🔍 사용자 정보 요청
