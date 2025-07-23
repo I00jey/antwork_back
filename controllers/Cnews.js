@@ -6,6 +6,7 @@ const WordsSchema = require('../models/WordSchema');
 const getCoinNewsList = require('../utils/coinCrawling');
 const { getNaverNewsList, getMainNewsList } = require('../utils/naverCrawling');
 const { tokenCheck } = require('../utils/tokenCheck');
+require('dotenv').config();
 
 exports.sendEconomyNews = async (req, res) => {
     try {
@@ -73,7 +74,7 @@ exports.resetNewsList = async (req, res) => {
     try {
         // 웹 크롤링을 비동기적으로 실행
         var newsDatas = await getMainNewsList(
-            'https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1=101'
+            process.env.RESET_NEWS_URL
         );
         // 날짜 최신순 정렬
         // 날짜를 Date 객체로 변환하는 함수
@@ -108,7 +109,7 @@ exports.getStockNews = async (req, res) => {
     try {
         // 웹 크롤링을 비동기적으로 실행
         const newsDatas = await getNaverNewsList(
-            'https://news.naver.com/breakingnews/section/101/258'
+            process.env.STOCK_NEWS_URL
         );
 
         //데이터베이스 작업을 비동기적으로 실행
@@ -140,7 +141,7 @@ exports.getCoinNews = async (req, res) => {
     try {
         // 웹 크롤링을 비동기적으로 실행
         const newsDatas = await getCoinNewsList(
-            'https://www.digitaltoday.co.kr/news/articleList.html?page=1&total=12260&sc_section_code=S1N9&sc_sub_section_code=&sc_serial_code=&sc_second_serial_code=&sc_area=&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_word=&box_idxno=&sc_multi_code=&sc_is_image=&sc_is_movie=&sc_user_name=&sc_order_by=E&view_type=sm'
+            process.env.COIN_NEWS_URL
         );
 
         // 데이터베이스 작업을 비동기적으로 실행
@@ -173,7 +174,7 @@ exports.getEconomyNews = async (req, res) => {
     try {
         // 웹 크롤링을 비동기적으로 실행
         const newsDatas = await getNaverNewsList(
-            'https://news.naver.com/breakingnews/section/101/263'
+            process.env.ECONOMY_NEWS_URL
         );
 
         // 데이터베이스 작업을 비동기적으로 실행
