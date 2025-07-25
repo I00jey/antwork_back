@@ -19,7 +19,9 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => { });
+app.get('/', (req, res) => {
+    res.send('Hello from backend!')
+});
 const indexRouter = require('./routes/Ruser');
 app.use('/', indexRouter);
 
