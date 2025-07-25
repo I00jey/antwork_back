@@ -132,7 +132,7 @@ exports.getStockNews = async (req, res) => {
         );
         res.status(201).send('saved');
     } catch (error) {
-        console.error('Error in main function:', error);
+        console.error('Error in main function:', error).message;
         res.status(500).send('Internal Server Error');
     }
 };
@@ -164,7 +164,7 @@ exports.getCoinNews = async (req, res) => {
         );
         res.status(201).send('saved');
     } catch (error) {
-        console.error('Error in main function:', error);
+        console.error('Error in main function:', error.message);
         res.status(500).send('Internal Server Error');
     }
 };
@@ -197,7 +197,7 @@ exports.getEconomyNews = async (req, res) => {
         );
         res.status(201).send('saved');
     } catch (error) {
-        console.error('Error in main function:', error);
+        console.error('Error in main function:', error.message);
         res.status(500).send('Internal Server Error');
     }
 };
