@@ -9,11 +9,17 @@ const DeleteCommunitySchema = require('../models/DeleteCommunitySchema');
 require('dotenv').config();
 const jwtSecret = process.env.JWTSECRET;
 const cookieConfig = {
-    maxAge: 60 * 60 * 1000,
+    maxAge: 60 * 60 * 1000,  // 1시간
+    httpOnly: true,          // 자바스크립트에서 쿠키 접근 차단 (보안)
+    secure: true,            // HTTPS 환경에서만 쿠키 전송
+    sameSite: 'none',        // cross-site 요청 허용 (프론트-백엔드 도메인 다를 때 필수)
 };
 
 const cookieConfig2 = {
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,  // 7일
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
 };
 
 exports.userLogin = async (req, res) => {

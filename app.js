@@ -4,15 +4,19 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const mongoConnect = require('./models/Mindex');
 
+app.set('trust proxy', 1); // 프록시 뒤 HTTPS 인식용
+
 mongoConnect();
 const PORT = process.env.PORT || 8000;
+
 app.use(
     cors({
         origin: process.env.FRONT_URI,
         credentials: true,
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
     })
 );
+
 
 const bodyParser = require('body-parser');
 app.use(cookieParser());
