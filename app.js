@@ -19,7 +19,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {});
+app.get('/', (req, res) => { });
 const indexRouter = require('./routes/Ruser');
 app.use('/', indexRouter);
 
@@ -38,6 +38,6 @@ app.use('/mypage', mypageRouter);
 const kakaoRouter = require('./routes/Rkakao');
 app.use('/kakao', kakaoRouter);
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on port ${PORT}`);
 });
