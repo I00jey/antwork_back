@@ -10,12 +10,10 @@ const NewsSchema = new Schema({
     title: {
         require: true,
         type: String,
-        unique: true,
     },
     content: {
         require: true,
         type: String,
-        unique: true,
     },
     date: {
         type: String,
