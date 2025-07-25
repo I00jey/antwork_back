@@ -116,9 +116,9 @@ exports.getStockNews = async (req, res) => {
         await Promise.all(
             newsDatas.map(async (newsdata) => {
                 try {
-                    // 중복된 데이터가 없을 때에만 데이터 생성
                     await NewsSchema.updateOne(
-                        { title: newsdata.title, content: newsdata.content },
+                        { url: newsdata.url },
+                        // 유니크 조건인 url이 중복되지 않을 때만 데이터 생성
                         { $setOnInsert: { ...newsdata, group: 1 } },
                         // updateOne 메서드의 옵션으로 upsert: true를 설정
                         // 주어진 조건에 맞는 데이터가 없을 때에는 새로운 데이터를 생성
@@ -150,7 +150,7 @@ exports.getCoinNews = async (req, res) => {
                 try {
                     // 중복된 데이터가 없을 때에만 데이터 생성
                     await NewsSchema.updateOne(
-                        { title: newsdata.title, content: newsdata.content },
+                        { url: newsdata.url },
                         { $setOnInsert: { ...newsdata, group: 2 } },
                         // updateOne 메서드의 옵션으로 upsert: true를 설정
                         // 주어진 조건에 맞는 데이터가 없을 때에는 새로운 데이터를 생성
@@ -183,7 +183,7 @@ exports.getEconomyNews = async (req, res) => {
                 try {
                     // 중복된 데이터가 없을 때에만 데이터 생성
                     await NewsSchema.updateOne(
-                        { title: newsdata.title, content: newsdata.content },
+                        { url: newsdata.url },
                         { $setOnInsert: { ...newsdata, group: 3 } },
                         // updateOne 메서드의 옵션으로 upsert: true를 설정
                         // 주어진 조건에 맞는 데이터가 없을 때에는 새로운 데이터를 생성

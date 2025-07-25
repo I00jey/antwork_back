@@ -5,6 +5,7 @@ const NewsSchema = new Schema({
     url: {
         require: true,
         type: String,
+        unique: true
     },
     title: {
         require: true,
